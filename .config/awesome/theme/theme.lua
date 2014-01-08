@@ -2,6 +2,8 @@
 -- Default awesome theme --
 ---------------------------
 
+themedir = os.getenv("HOME") .. "/.config/awesome/theme/"
+
 theme = {}
 
 theme.font          = "sans 8"
@@ -85,22 +87,22 @@ theme.titlebar_maximized_button_focus_active  = "/usr/share/awesome/themes/defau
 theme.wallpaper = "/usr/share/awesome/themes/default/background.png"
 
 -- You can use your own layout icons like this:
-theme.layout_fairh = "/usr/share/awesome/themes/default/layouts/fairhw.png"
-theme.layout_fairv = "/usr/share/awesome/themes/default/layouts/fairvw.png"
-theme.layout_floating  = "/usr/share/awesome/themes/default/layouts/floatingw.png"
-theme.layout_magnifier = "/usr/share/awesome/themes/default/layouts/magnifierw.png"
-theme.layout_max = "/usr/share/awesome/themes/default/layouts/maxw.png"
-theme.layout_fullscreen = "/usr/share/awesome/themes/default/layouts/fullscreenw.png"
-theme.layout_tilebottom = "/usr/share/awesome/themes/default/layouts/tilebottomw.png"
-theme.layout_tileleft   = "/usr/share/awesome/themes/default/layouts/tileleftw.png"
-theme.layout_tile = "/usr/share/awesome/themes/default/layouts/tilew.png"
-theme.layout_tiletop = "/usr/share/awesome/themes/default/layouts/tiletopw.png"
-theme.layout_spiral  = "/usr/share/awesome/themes/default/layouts/spiralw.png"
-theme.layout_dwindle = "/usr/share/awesome/themes/default/layouts/dwindlew.png"
+theme.layout_fairh      = themedir .. "/layouts/fairh.png"
+theme.layout_fairv      = themedir .. "/layouts/fairv.png"
+theme.layout_floating   = themedir .. "/layouts/floating.png"
+theme.layout_magnifier  = themedir .. "/layouts/magnifier.png"
+theme.layout_max        = themedir .. "/layouts/max.png"
+theme.layout_fullscreen = themedir .. "/layouts/fullscreen.png"
+theme.layout_tilebottom = themedir .. "/layouts/tilebottom.png"
+theme.layout_tileleft   = themedir .. "/layouts/tileleft.png"
+theme.layout_tile       = themedir .. "/layouts/tile.png"
+theme.layout_tiletop    = themedir .. "/layouts/tiletop.png"
+theme.layout_spiral     = themedir .. "/layouts/spiral.png"
+theme.layout_dwindle    = themedir .. "/layouts/dwindle.png"
 
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 
--- Define the icon theme for application icons. If not set then the icons 
+-- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
 theme.icon_theme = nil
 
