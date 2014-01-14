@@ -1,0 +1,7 @@
+[Default Applications]
+application/pdf=evince.desktop;
+application/x-rar=file-roller.desktop;
+application/zip=file-roller.desktop;
+application/x-compressed-tar=file-roller.desktop;
+image/x-apple-ios-png=mirage-usercreated-1.desktop;
+image/jpeg=mirage.desktop;
