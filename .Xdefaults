@@ -1,12 +1,17 @@
 !! urxvt settings
-URxvt*scrollBar: false
+URxvt*scrollBar:       false
 URxvt*secondaryScroll: true
-URxvt*urlLauncher: chromium
-URxvt*depth: 32
-URxvt*internalBorder: 0
-URxvt*saveLines: 8192
-URxvt*transparent: true
-URxvt*shading: 15
+URxvt*urlLauncher:     chromium
+URxvt*depth:           32
+URxvt*internalBorder:  0
+URxvt*saveLines:       65536
+URxvt*transparent:     true
+URxvt*shading:         15
+URxvt*iso14755:        false
+URxvt*termName:        rxvt-unicode
+URxvt*perl-ext-common: default,matcher
+URxvt*urlLauncher:     chromium
+URxvt*matcher.button:  1
 
 URxvt*background:  #212121
 URxvt*foreground:  #f0f0f0
@@ -27,12 +32,12 @@ URxvt*color11:     #FCE94F
 URxvt*color12:     #729FCF
 URxvt*color13:     #75507b
 
-URxvt*font:               xft:Terminus:style=Semibold:pixelsize=12:antialias=true:hinting=slight
-URxvt*boldFont:           xft:Terminus:style=bold:pixelsize=12:antialias=true:hinting=slight
+URxvt*font:     xft:Terminus:style=Semibold:pixelsize=12:antialias=true:hinting=slight
+URxvt*boldFont: xft:Terminus:style=bold:pixelsize=12:antialias=true:hinting=slight
 
 !! xft settings
-Xft.dpi      : 96
+Xft.dpi:       96
 Xft.antialias: true
-Xft.rgba     : rgb
-Xft.hinting  : true
+Xft.rgba:      rgb
+Xft.hinting:   true
 Xft.hintstyle: hintslight
