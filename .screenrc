@@ -1,0 +1,12 @@
+startup_message off
+
+altscreen on
+defscrollback 1000
+vbell off
+
+shelltitle "$ |bash"
+
+hardstatus alwayslastline '%{= 9w}%{+b}[%H] %{-b}%{= 9g}%-Lw%{= 9r}%{+b}%n*%f %t%{-b}%{= 9g}%+Lw%{= 9w}%{+b} %= %C %a'
+
+bindkey "^[[1;5C" next  # ctrl-left
+bindkey "^[[1;5D" prev  # ctrl-right
