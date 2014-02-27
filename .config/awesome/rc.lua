@@ -78,7 +78,7 @@ end
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6 }, s, layouts[1])
+    tags[s] = awful.tag({ "1", "2", "3", "4", "5", "6" }, s, layouts[1])
 end
 -- }}}
 
@@ -110,14 +110,13 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- }}}
 
 -- {{{ Wibox
+function hex2rgb(hex)
+    hex = hex:gsub("#","")
+    return {tonumber("0x"..hex:sub(1,2)) / 256, tonumber("0x"..hex:sub(3,4)) / 256, tonumber("0x"..hex:sub(5,6)) / 256}
+end
 
--- {{{ Function to reate a new arrow image on the fly
-function create_arrow(bgcolor, arrowcolor)
-    function hex2rgb(hex)
-        hex = hex:gsub("#","")
-        return {tonumber("0x"..hex:sub(1,2)) / 256, tonumber("0x"..hex:sub(3,4)) / 256, tonumber("0x"..hex:sub(5,6)) / 256}
-    end
-
+-- {{{ Function to create a new arrow image on the fly
+function create_arrow(bgcolor, arrowcolor, direction)
     local arrow = wibox.widget.base.make_widget()
     arrow.bgcolor = hex2rgb(bgcolor)
     arrow.arrowcolor = hex2rgb(arrowcolor)
@@ -127,17 +126,28 @@ function create_arrow(bgcolor, arrowcolor)
         return size, size
     end
 
+    local ab, c
+    if direction == "left" then
+        ab = 0.75
+        c = 0.25
+    elseif direction == "right" then
+        ab = 0.25
+        c = 0.75
+    else
+        error("invalid arrow direction '".. direction .."'")
+    end
+
     arrow.draw = function(arrow, wibox, cr, width, height)
         -- fill out the background
-        cr:rectangle(0, 0, width, height);
+        cr:rectangle(0, 0, width, height)
         cr:set_source_rgb(unpack(arrow.bgcolor))
         cr:fill()
 
         -- draw the arrow itself
         cr:move_to(width, 0)
-        cr:line_to(width * 0.75, 0)
-        cr:line_to(width * 0.25, height / 2)
-        cr:line_to(width * 0.75, height)
+        cr:line_to(width * ab, 0)
+        cr:line_to(width * c, height / 2)
+        cr:line_to(width * ab, height)
         cr:line_to(width, height)
         cr:close_path()
         cr:set_source_rgb(unpack(arrow.arrowcolor))
@@ -148,6 +158,39 @@ function create_arrow(bgcolor, arrowcolor)
 end
 -- }}}
 
+-- {{{ Function to create a new titlebar image
+function create_titlebar_image(bgcolor, textcolor, text)
+    local img = wibox.widget.base.make_widget()
+    img.bgcolor = hex2rgb(bgcolor)
+    img.textcolor = hex2rgb(textcolor)
+    img.text = text
+
+    img.fit = function(img, width, height)
+        local size = math.min(width, height)
+        return size, size
+    end
+
+    img.draw = function(img, wibox, cr, width, height)
+        -- fill out the background
+        cr:rectangle(0, 0, width, height)
+        cr:set_source_rgb(unpack(img.bgcolor))
+        cr:fill()
+
+        -- write the text
+        cr:set_source_rgb(unpack(img.textcolor))
+        cr:select_font_face("Terminus", 0, 0)
+        cr:set_font_size(20)
+
+        local extent = cr:text_extents(img.text)
+
+        cr:move_to(width/2 - extent.width/2, height/2 + extent.height/2)
+        cr:show_text(img.text)
+    end
+
+    return img
+end
+-- }}}
+
 
 -- Create the date and time widget
 datewidget = wibox.widget.background()
@@ -155,7 +198,7 @@ datewidget_text = wibox.widget.textbox()
 datewidget:set_widget(datewidget_text)
 datewidget:set_bg(beautiful.pl_1)
 
-local datewidget_fmt = '<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font .. '">%a,  %b %d  %H:%M</span>'
+local datewidget_fmt = '<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font .. '">%a, %b %d %H:%M</span>'
 vicious.register(datewidget_text, vicious.widgets.date, datewidget_fmt)
 
 -- Create the cpu usage widget
@@ -188,7 +231,7 @@ vicious.register(volwidget_text, vicious.widgets.volume, volwidget_fmt, 0.3, "Ma
 -- Create the spofity widget
 spotifywidget = wibox.widget.background()
 spotifywidget_text = wibox.widget.textbox()
-spotifywidget_text:set_markup('<span color="' .. beautiful.pl_text .. '">SPO: N/A - N/A</span>')
+spotifywidget_text:set_markup('<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font .. '">SPO: N/A - N/A</span>')
 spotifywidget:set_widget(spotifywidget_text)
 spotifywidget:set_bg(beautiful.pl_5)
 
@@ -213,11 +256,24 @@ spotifywidget_update = function(event, interface, data)
         end
     end
 
-    spotifywidget_text:set_markup('<span color="' .. beautiful.pl_text .. '">SPO' .. (spotify.playback and '' or " (P)") .. ': '.. awful.util.escape(spotify.title) .. ' - ' .. awful.util.escape(spotify.artist) .. '</span>')
+    spotifywidget_text:set_markup('<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font ..'">SPO' .. (spotify.playback and '' or " (P)") .. ': '.. awful.util.escape(spotify.title) .. ' - ' .. awful.util.escape(spotify.artist) .. '</span>')
 end
 
 dbus.add_match("session", "type='signal',path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
 dbus.connect_signal("org.freedesktop.DBus.Properties", spotifywidget_update)
+
+-- Custom tasklist widget
+
+function create_tasklistwidget()
+    local tasklistwidget = wibox.layout.flex.horizontal()
+    tasklistwidget.orig_add = tasklistwidget.add
+    tasklistwidget.add = function(tasklist, widget)
+        tasklistwidget:orig_add(create_arrow(beautiful.pl_2, beautiful.pl_1, "left"))
+        tasklistwidget:orig_add(widget)
+        tasklistwidget:orig_add(create_arrow(beautiful.pl_1, beautiful.pl_2, "left"))
+    end
+    return tasklistwidget
+end
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -282,7 +338,7 @@ for s = 1, screen.count() do
     mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
+    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons) --, nil, nil, create_tasklistwidget())
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
@@ -295,19 +351,19 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
-    right_layout:add(create_arrow(beautiful.bg_normal, beautiful.pl_6))
-    right_layout:add(create_arrow(beautiful.pl_6, beautiful.pl_5))
+    --right_layout:add(create_arrow(beautiful.bg_normal, beautiful.pl_6, "left"))
+    right_layout:add(create_arrow(beautiful.bg_normal, beautiful.pl_5, "left"))
     right_layout:add(spotifywidget)
-    right_layout:add(create_arrow(beautiful.pl_5, beautiful.pl_4))
+    right_layout:add(create_arrow(beautiful.pl_5, beautiful.pl_4, "left"))
     right_layout:add(volwidget)
-    right_layout:add(create_arrow(beautiful.pl_4, beautiful.pl_3))
+    right_layout:add(create_arrow(beautiful.pl_4, beautiful.pl_3, "left"))
     right_layout:add(memwidget)
-    right_layout:add(create_arrow(beautiful.pl_3, beautiful.pl_2))
+    right_layout:add(create_arrow(beautiful.pl_3, beautiful.pl_2, "left"))
     right_layout:add(cpuwidget)
-    right_layout:add(create_arrow(beautiful.pl_2, beautiful.pl_1))
+    right_layout:add(create_arrow(beautiful.pl_2, beautiful.pl_1, "left"))
     right_layout:add(datewidget)
-    right_layout:add(create_arrow(beautiful.pl_1, beautiful.bg_normal))
-    if s == 2 then
+    right_layout:add(create_arrow(beautiful.pl_1, beautiful.bg_normal, "left"))
+    if s == 2 or screen.count() == 1 then
         local systray = wibox.widget.systray()
         right_layout:add(systray)
     end
@@ -521,7 +577,87 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
--- {{ Function to ensure that certain programs only have one instance of themselves
+-- {{{ titlebar stuff
+function create_titlebar(c)
+    -- buttons for the titlebar
+    local buttons = awful.util.table.join(
+            awful.button({ }, 1, function()
+                client.focus = c
+                c:raise()
+                awful.mouse.client.move(c)
+            end),
+            awful.button({ }, 3, function()
+                client.focus = c
+                c:raise()
+                awful.mouse.client.resize(c)
+            end)
+            )
+
+    -- Widgets that are aligned to the left
+    local left_layout = wibox.layout.fixed.horizontal()
+    left_layout:add(create_arrow(beautiful.pl_1, beautiful.bg_normal, "right"))
+    left_layout:add(awful.titlebar.widget.iconwidget(c))
+    left_layout:buttons(buttons)
+
+    -- Widgets that are aligned to the right
+    local right_layout = wibox.layout.fixed.horizontal()
+    --right_layout:add(awful.titlebar.widget.floatingbutton(c))
+    --right_layout:add(awful.titlebar.widget.maximizedbutton(c))
+    --right_layout:add(awful.titlebar.widget.stickybutton(c))
+    --right_layout:add(awful.titlebar.widget.ontopbutton(c))
+    right_layout:add(awful.titlebar.widget.closebutton(c))
+    right_layout:add(create_arrow(beautiful.bg_normal, beautiful.pl_1, "left"))
+
+    -- Close Button
+
+    -- The title goes in the middle
+    local middle_layout = wibox.layout.flex.horizontal()
+    local title = awful.titlebar.widget.titlewidget(c)
+    title:set_align("center")
+    middle_layout:add(title)
+    middle_layout:buttons(buttons)
+
+    -- Now bring it all together
+    local layout = wibox.layout.align.horizontal()
+    layout:set_left(left_layout)
+    layout:set_right(right_layout)
+    layout:set_middle(middle_layout)
+
+    awful.titlebar(c, {size = 0}):set_widget(layout)
+end
+
+function should_have_titlebar(c)
+    local layout = awful.layout.getname(awful.layout.get(c.screen))
+    local floating = awful.client.floating.get(c) or layout == "floating"
+    return floating and not c.fullscreen
+end
+
+function update_titlebar(c)
+    if should_have_titlebar(c) then
+        awful.titlebar(c, {size = beautiful.titlebar_height})
+    else
+        awful.titlebar(c, {size = 0})
+    end
+end
+
+client.connect_signal("manage", function (c, startup)
+    create_titlebar(c)
+    update_titlebar(c)
+
+    c:connect_signal("property::floating", function() update_titlebar(c) end)
+end)
+
+for s = 1, screen.count() do
+    screen[s]:connect_signal("arrange", function ()
+        local clients = awful.client.visible(s)
+        for _, c in pairs(clients) do
+            update_titlebar(c)
+        end
+    end)
+end
+-- }}}
+
+-- {{{ Function to ensure that certain programs only have one instance of themselves
 function run_once(cmd)
         findme = cmd
         firstspace = cmd:find(" ")
@@ -531,4 +667,6 @@ function run_once(cmd)
         awful.util.spawn_with_shell("pgrep -u $USER -x " .. findme .. " > /dev/null || (" .. cmd .. ")")
 end
 
+run_once("dropboxd")
+-- }}}
 

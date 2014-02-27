@@ -6,33 +6,33 @@ themedir = os.getenv("HOME") .. "/.config/awesome/theme/"
 
 theme = {}
 
-theme.font          = "sans 8"
+theme.font          = "Terminus 9"
 
-theme.bg_normal     = "#222222"
-theme.bg_focus      = "#535d6c"
-theme.bg_urgent     = "#ff0000"
-theme.bg_minimize   = "#444444"
+theme.bg_normal     = "#3a4055"
+theme.bg_focus      = "#3a4055"
+theme.bg_urgent     = "#3a4055"
+theme.bg_minimize   = "#3a4055"
 theme.bg_systray    = theme.bg_normal
 
-theme.fg_normal     = "#aaaaaa"
-theme.fg_focus      = "#ffffff"
-theme.fg_urgent     = "#ffffff"
-theme.fg_minimize   = "#ffffff"
+theme.fg_normal     = "#e6e1dc"
+theme.fg_focus      = "#f9f7f3"
+theme.fg_urgent     = "#da4939"
+theme.fg_minimize   = "#6d9cbe"
 
 theme.border_width  = 1
-theme.border_normal = "#000000"
-theme.border_focus  = "#535d6c"
+theme.border_normal = "#2b2b2b"
+theme.border_focus  = "#5a647e"
 theme.border_marked = "#91231c"
 
 -- powerline colors
 theme.pl_font = theme.font
-theme.pl_text = "#FFFFFF"
-theme.pl_1 = "#777E76"
-theme.pl_2 = "#C2C2A4"
-theme.pl_3 = "#92B0A0"
-theme.pl_4 = "#D0785D"
-theme.pl_5 = "#4B3B51"
-theme.pl_6 = "#4B696D"
+theme.pl_text = "#f9f7f3"
+theme.pl_1 = "#6d9cbe"
+theme.pl_2 = "#519f50"
+theme.pl_3 = "#a5c261"
+theme.pl_4 = "#da4939"
+theme.pl_5 = "#cc7833"
+theme.pl_6 = "#ffc66d"
 
 -- There are other variable sets
 -- overriding the default one when
@@ -60,6 +60,8 @@ theme.menu_width  = 100
 -- beautiful.variable in your rc.lua
 --theme.bg_widget = "#cc0000"
 
+theme.titlebar_height = 16
+
 -- Define the image to load
 theme.titlebar_close_button_normal = "/usr/share/awesome/themes/default/titlebar/close_normal.png"
 theme.titlebar_close_button_focus  = "/usr/share/awesome/themes/default/titlebar/close_focus.png"
@@ -84,7 +86,7 @@ theme.titlebar_maximized_button_focus_inactive  = "/usr/share/awesome/themes/def
 theme.titlebar_maximized_button_normal_active = "/usr/share/awesome/themes/default/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_active  = "/usr/share/awesome/themes/default/titlebar/maximized_focus_active.png"
 
-theme.wallpaper = "/usr/share/awesome/themes/default/background.png"
+theme.wallpaper = themedir .. "/wallpapers/Moon-SB-1920x1080.jpg"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh      = themedir .. "/layouts/fairh.png"
