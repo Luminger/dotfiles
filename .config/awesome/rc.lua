@@ -413,6 +413,9 @@ globalkeys = awful.util.table.join(
     awful.key({     }, "XF86AudioLowerVolume", function() awful.util.spawn("amixer set Master 5%-", false) end),
     awful.key({     }, "XF86AudioMute", function() awful.util.spawn("amixer sset Master toggle", false) end),
 
+    -- unmount all volumes
+    awful.key({ modkey, "Control" }, "c", function() awful.util.spawn("devmon -u") end),
+
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
@@ -668,5 +671,30 @@ function run_once(cmd)
 end
 
 run_once("dropboxd")
+-- }}}
+
+-- {{{ devmon handling
+function handle_device(event, mountpoint, devicename, label)
+    local ti = "Unknown device event '" .. event .. "'"
+    local te = "Unknown action happned to '" .. devicename .. "'"
+
+    if event == "drive" then
+        ti = "Volume '" .. label .. "' mounted"
+        te = "'" .. devicename .. "' is now mounted at '" .. mountpoint .. "'"
+    elseif event == "remove" then
+        ti = "Volume '" .. label .. "' removed"
+        te = "'" .. devicename .. "' got removed from '" .. mountpoint .. "'"
+    elseif event == "unmount" then
+        ti = "Volume '" .. label .. "' unmounted"
+        te = "'" .. devicename .. "' got unmounted from '" .. mountpoint .. "'"
+    end
+
+    naughty.notify({ title = ti, text = te})
+end
+
+run_once("devmon --exec-on-drive   \"echo \\\"handle_device(\'drive\', %d, \'%f\', %l)\\\" | awesome-client -\" "  ..
+                "--exec-on-remove  \"echo \\\"handle_device(\'remove\', %d, \'%f\', %l)\\\" | awesome-client -\" "  ..
+                "--exec-on-unmount \"echo \\\"handle_device(\'unmount\', %d, \'%f\', %l)\\\" | awesome-client -\" " ..
+                "--no-gui")
 -- }}}
 
