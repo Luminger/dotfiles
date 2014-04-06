@@ -1,8 +1,8 @@
 [Default Applications]
-application/pdf=evince.desktop;
-application/x-rar=file-roller.desktop;
-application/zip=file-roller.desktop;
-application/x-compressed-tar=file-roller.desktop;
-image/x-apple-ios-png=mirage-usercreated-1.desktop;
+application/x-rar=xarchiver.desktop;
+application/x-compressed-tar=xarchiver.desktop;
+image/x-apple-ios-png=mirage.desktop;
 image/jpeg=mirage.desktop;
 text/plain=gvim.desktop;
+application/pdf=evince.desktop;
+application/zip=xarchiver.desktop;
