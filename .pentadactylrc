@@ -1,0 +1,10 @@
+"1.1
+
+loadplugins '\.(js|penta)$'
+group user
+set guioptions=Cs
+set hintkeys=asdfg;lkjh
+set scrolltime=0
+set showtabline=never
+
+" vim: set ft=pentadactyl:
