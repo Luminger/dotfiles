@@ -20,6 +20,8 @@ if [[ "$TERM" = "xterm" ]]; then
     export TERM="xterm-256color"
 fi
 
+export EDITOR=vim
+
 ###############################################################################
 #     ALIASES
 ###############################################################################
@@ -289,7 +291,7 @@ zstyle ':vcs_info:*' actionformats "%{${fg_no_bold[magenta]}%}(%{${fg_bold[white
 # github.com/gianu
 # sgianazza@gmail.com
 
-PROMPT='[%{$fg_bold[blue]%}%n%{$reset_color%}@%{$fg_bold[cyan]%}%m%{$reset_color%} %{$fg[white]%}%30<..<%~%<<%{$reset_color%}%{$reset_color%}]$ '
+PROMPT='[%{$fg_bold[blue]%}%n%{$reset_color%}@%{$fg_bold[grey]%}%m%{$reset_color%} %{$fg[white]%}%30<..<%~%<<%{$reset_color%}%{$reset_color%}]$ '
 
 #PROMPT='[%{${fg_bold[green]}%}%n@%m %{${fg_bold[blue]}%}%30<?<%~%<<%{${reset_color}%} %# '
 #RPROMPT='%(?.${vcs_info_msg_0_}${_virtualenv_prompt}.%{${fg_bold[red]}%}?%?%{${reset_color}%})'
