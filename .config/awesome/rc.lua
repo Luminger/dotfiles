@@ -12,6 +12,7 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 -- extra libraries
 local vicious = require("vicious")
+local lfs = require("lfs")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -294,6 +295,18 @@ function create_tasklistwidget()
     return tasklistwidget
 end
 
+-- Batteru widget
+batwidget = wibox.widget.background()
+batwidget_text = wibox.widget.textbox()
+batwidget:set_widget(batwidget_text)
+batwidget:set_bg(beautiful.pl_5)
+
+local batwidget_fmt = '<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font .. '">BAT: $2% ($1$3)</span>'
+
+-- {{{ Battery state
+-- Initialize widget
+vicious.register(batwidget_text, vicious.widgets.bat, batwidget_fmt, 61, "BAT0")
+
 -- Create a wibox for each screen and add it
 mywibox = {}
 mypromptbox = {}
@@ -372,7 +385,12 @@ for s = 1, screen.count() do
     local right_layout = wibox.layout.fixed.horizontal()
     --right_layout:add(create_arrow(beautiful.bg_normal, beautiful.pl_6, "left"))
     right_layout:add(create_arrow(beautiful.bg_normal, beautiful.pl_5, "left"))
-    right_layout:add(spotifywidget)
+
+    if lfs.attributes("/sys/class/power_supply/BAT0/capacity") ~= nil then
+        right_layout:add(batwidget)
+    else
+        right_layout:add(spotifywidget)
+    end
     right_layout:add(create_arrow(beautiful.pl_5, beautiful.pl_4, "left"))
     right_layout:add(volwidget)
     right_layout:add(create_arrow(beautiful.pl_4, beautiful.pl_3, "left"))
