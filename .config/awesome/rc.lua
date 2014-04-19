@@ -271,8 +271,18 @@ end
 dbus.add_match("session", "type='signal',path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
 dbus.connect_signal("org.freedesktop.DBus.Properties", spotifywidget_update)
 
--- Custom tasklist widget
+-- Activate slimlock on suspend/hibernate
+prepare_for_sleep = function(...)
+    local data = {...}
+    if data[2] == true then
+        awful.util.spawn("slimlock")
+    end
+end
 
+dbus.add_match("system", "type='signal',path='/org/freedesktop/login1',interface='org.freedesktop.login1.Manager',member='PrepareForSleep'")
+dbus.connect_signal("org.freedesktop.login1.Manager", prepare_for_sleep)
+
+-- Custom tasklist widget
 function create_tasklistwidget()
     local tasklistwidget = wibox.layout.flex.horizontal()
     tasklistwidget.orig_add = tasklistwidget.add
