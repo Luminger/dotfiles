@@ -208,7 +208,7 @@ datewidget:set_widget(datewidget_text)
 datewidget:set_bg(beautiful.pl_1)
 
 local datewidget_fmt = '<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font .. '">%a, %b %d %H:%M</span>'
-vicious.register(datewidget_text, vicious.widgets.date, datewidget_fmt)
+vicious.register(datewidget_text, vicious.widgets.date, datewidget_fmt, 5)
 
 -- Create the cpu usage widget
 cpuwidget = wibox.widget.background()
@@ -217,7 +217,7 @@ cpuwidget:set_widget(cpuwidget_text)
 cpuwidget:set_bg(beautiful.pl_2)
 
 local cpuwidget_fmt = '<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font .. '">CPU: $1%</span>'
-vicious.register(cpuwidget_text, vicious.widgets.cpu, cpuwidget_fmt)
+vicious.register(cpuwidget_text, vicious.widgets.cpu, cpuwidget_fmt, 3)
 
 -- Create the memory usage widget
 memwidget = wibox.widget.background()
@@ -226,7 +226,7 @@ memwidget:set_widget(memwidget_text)
 memwidget:set_bg(beautiful.pl_3)
 
 local memwidget_fmt = '<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font .. '">MEM: $1%</span>'
-vicious.register(memwidget_text, vicious.widgets.mem, memwidget_fmt)
+vicious.register(memwidget_text, vicious.widgets.mem, memwidget_fmt, 13)
 
 -- Create the audio volume widget
 volwidget = wibox.widget.background()
@@ -235,7 +235,7 @@ volwidget:set_widget(volwidget_text)
 volwidget:set_bg(beautiful.pl_4)
 
 local volwidget_fmt = '<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font .. '">VOL: $1%</span>'
-vicious.register(volwidget_text, vicious.widgets.volume, volwidget_fmt, 0.3, "Master")
+vicious.register(volwidget_text, vicious.widgets.volume, volwidget_fmt, 19, "Master", 5)
 
 -- Create the spofity widget
 spotifywidget = wibox.widget.background()
