@@ -92,6 +92,7 @@ myawesomemenu = {
 }
 
 systemmenu = {
+    { "suspend", "systemctl suspend" },
     { "reboot", "systemctl reboot" },
     { "shutdown", "systemctl poweroff"},
 }
