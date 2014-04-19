@@ -115,8 +115,15 @@ function hex2rgb(hex)
     return {tonumber("0x"..hex:sub(1,2)) / 256, tonumber("0x"..hex:sub(3,4)) / 256, tonumber("0x"..hex:sub(5,6)) / 256}
 end
 
+arrowcache = {}
+
 -- {{{ Function to create a new arrow image on the fly
 function create_arrow(bgcolor, arrowcolor, direction)
+    local cachestr = bgcolor .. arrowcolor .. direction
+    if arrowcache[cachestr] ~= nil then
+        return arrowcache[cachestr]
+    end
+
     local arrow = wibox.widget.base.make_widget()
     arrow.bgcolor = hex2rgb(bgcolor)
     arrow.arrowcolor = hex2rgb(arrowcolor)
@@ -154,6 +161,7 @@ function create_arrow(bgcolor, arrowcolor, direction)
         cr:fill()
     end
 
+    arrowcache[cachestr] = arrow
     return arrow
 end
 -- }}}
