@@ -269,7 +269,7 @@ spotifywidget_update = function(event, interface, data)
     spotifywidget_text:set_markup('<span color="' .. beautiful.pl_text .. '" font="' .. beautiful.pl_font ..'">SPO' .. (spotify.playback and '' or " (P)") .. ': '.. awful.util.escape(spotify.title) .. ' - ' .. awful.util.escape(spotify.artist) .. '</span>')
 end
 
-dbus.add_match("session", "type='signal',path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged'")
+dbus.add_match("session", "type='signal',path='/org/mpris/MediaPlayer2',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged',sender='com.spotify.qt'")
 dbus.connect_signal("org.freedesktop.DBus.Properties", spotifywidget_update)
 
 -- Activate slimlock on suspend/hibernate
