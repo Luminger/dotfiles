@@ -250,13 +250,19 @@ spotify.playback = false
 spotify.title = "N/A"
 spotify.artist = "N/A"
 
-spotifywidget_update = function(event, interface, data)
-    if data["PlaybackStatus"] then
-        spotify.playback = data["PlaybackStatus"] == "Playing" and true or false
-    elseif data["Metadata"] then
-        spotify.title = data["Metadata"]["xesam:title"]
+dbg = {}
+spotifywidget_update = function(...)
+    local data = {...}
+    table.insert(dbg, data)
 
-        artists = data["Metadata"]["xesam:artist"]
+    if data[3]["PlaybackStatus"] then
+        spotify.playback = data[3]["PlaybackStatus"] == "Playing"
+    end
+
+    if data[3]["Metadata"] then
+        spotify.title = data[3]["Metadata"]["xesam:title"]
+
+        artists = data[3]["Metadata"]["xesam:artist"]
         for i=1,#artists do
             if i == 1 then
                 spotify.artist = artists[i]
