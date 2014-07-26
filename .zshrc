@@ -340,3 +340,21 @@ zmodload -ap zsh/mapfile mapfile
 
 # zmv for batch renaming/moving
 autoload -U zmv
+
+###############################################################################
+#     VBOX ALIASES
+###############################################################################
+
+alias start-buildsrv='VBoxManage startvm Debian\ Buildsrv --type headless'
+alias stop-buildsrv='VBoxManage controlvm Debian\ Buildsrv acpipowerbutton'
+
+###############################################################################
+#     KEYCHAIN
+###############################################################################
+keychain --nogui id_rsa
+[ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
+[ -f $HOME/.keychain/$HOSTNAME-sh ] && \
+    . $HOME/.keychain/$HOSTNAME-sh
+[ -f $HOME/.keychain/$HOSTNAME-sh-gpg ] && \
+    . $HOME/.keychain/$HOSTNAME-sh-gpg
+
