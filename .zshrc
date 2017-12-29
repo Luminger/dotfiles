@@ -260,17 +260,17 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' \
 #     VIRTUALENV
 ###############################################################################
 
-VIRTUAL_ENV_DISABLE_PROMPT=1
+#VIRTUAL_ENV_DISABLE_PROMPT=1
 
-virtualenv_prompt() {
-    if [[ -n $VIRTUAL_ENV ]]; then
-        _virtualenv_prompt="%{${fg_no_bold[magenta]}%}(%{${fg_bold[white]}%}?$(basename $VIRTUAL_ENV)%{${fg_no_bold[magenta]}%})%{$reset_color%}"
-    fi
-}
+#virtualenv_prompt() {
+#    if [[ -n $VIRTUAL_ENV ]]; then
+#        _virtualenv_prompt="%{${fg_no_bold[magenta]}%}(%{${fg_bold[white]}%}?$(basename $VIRTUAL_ENV)%{${fg_no_bold[magenta]}%})%{$reset_color%}"
+#    fi
+#}
 
-add-zsh-hook precmd virtualenv_prompt
+#add-zsh-hook precmd virtualenv_prompt
 
-source /usr/bin/virtualenvwrapper.sh
+#source /usr/bin/virtualenvwrapper.sh
 
 
 ###############################################################################
@@ -347,6 +347,11 @@ autoload -U zmv
 
 alias start-buildsrv='VBoxManage startvm Debian\ Buildsrv --type headless'
 alias stop-buildsrv='VBoxManage controlvm Debian\ Buildsrv acpipowerbutton'
+
+###############################################################################
+#     PATH ADDITIONS
+###############################################################################
+export PATH=$HOME/bin:$HOME/go/bin:$PATH
 
 ###############################################################################
 #     KEYCHAIN
